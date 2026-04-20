@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Panel Profesor</title>
+
+<style>
+body{
+  font-family: Arial;
+  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:white;
+  text-align:center;
+}
+.container{margin-top:50px;}
+input{padding:8px;margin:5px;border-radius:5px;border:none;}
+button{
+  padding:8px 15px;
+  border:none;
+  border-radius:5px;
+  background:#00c6ff;
+  color:white;
+  cursor:pointer;
+}
+button:hover{background:#0072ff;}
+.hidden{display:none;}
+table{
+  margin:auto;
+  margin-top:20px;
+  border-collapse:collapse;
+  width:80%;
+}
+th,td{
+  border:1px solid white;
+  padding:10px;
+}
+</style>
+
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="container">
+  <h2>🔐 Iniciar Sesión</h2>
+  <input type="text" id="usuario" placeholder="Usuario"><br>
+  <input type="password" id="clave" placeholder="Contraseña"><br>
+  <button onclick="login()">Entrar</button>
+</div>
+
+<!-- PANEL -->
+<div id="panel" class="hidden">
+
+  <h1>🧠 Profesor Jarvis Assist</h1>
+  <img src="logo.png" width="120">
+
+  <div class="container">
+    <h2>Agregar Estudiante</h2>
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="number" id="n1" placeholder="Nota 1">
+    <input type="number" id="n2" placeholder="Nota 2">
+    <input type="number" id="n3" placeholder="Nota 3">
+    <button onclick="agregar()">Agregar</button>
+  </div>
+
+  <table id="tabla">
+    <tr>
+      <th>Nombre</th>
+      <th>Promedio</th>
+      <th>Estado</th>
+      <th>Acción</th>
+    </tr>
+  </table>
+
+  <br>
+  <button onclick="generarBoletin()">📄 Generar Boletín</button>
+
+</div>
+
+<script>
+
+function login(){
+  let user=document.getElementById("usuario").value;
+  let pass=document.getElementById("clave").value;
+
+  if(user==="Kelly soraca" && pass==="1234"){
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("panel").classList.remove("hidden");
+  }else{
+    alert("Datos incorrectos");
+  }
+}
+
+function agregar(){
+  let nombre=document.getElementById("nombre").value;
+  let n1=parseFloat(document.getElementById("n1").value);
+  let n2=parseFloat(document.getElementById("n2").value);
+  let n3=parseFloat(document.getElementById("n3").value);
+
+  if(!nombre || isNaN(n1)||isNaN(n2)||isNaN(n3)){
+    alert("Completa todos los campos");
+    return;
+  }
+
+  let prom=(n1+n2+n3)/3;
+  let estado = prom >= 30 ? "Aprobado ✅" : "Reprobado ❌";
+
+  let tabla=document.getElementById("tabla");
+  let fila=tabla.insertRow();
+
+  fila.insertCell(0).innerHTML=nombre;
+  fila.insertCell(1).innerHTML=prom.toFixed(2);
+  fila.insertCell(2).innerHTML=estado;
+  fila.insertCell(3).innerHTML='<button onclick="eliminar(this)">Eliminar</button>';
+}
+
+function eliminar(btn){
+  let fila=btn.parentNode.parentNode;
+  fila.remove();
+}
+
+function generarBoletin(){
+  let tabla=document.getElementById("tabla").outerHTML;
+  let ventana=window.open("", "", "width=800,height=600");
+  ventana.document.write("<h1>Boletín de Notas</h1>"+tabla);
+  ventana.print();
+}
+
+</script>
+
+</body>
+</html>
